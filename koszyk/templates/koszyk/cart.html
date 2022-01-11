@@ -1,0 +1,46 @@
+{% extends "witryna/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<ul>
+    {% for item in cart_products %}
+    <li class="list-group-item">
+        <div class="card flex-row align-items-center">
+            <img class="card-img-left example-card-img-responsive" src="{{ item.product.image.url }}"
+                 style="max-width: 9rem;"/>
+            <div class="card-body d-flex justify-content-between">
+                <div>
+                    <h4 class="card-title h5 h4-sm">{{ item.product.marka }}{{ item.product }}</h4>
+                    <p class="mb-1">{{ item.product.cena }}zł</p>
+                    <span class="badge bg-primary rounded-pill text-light">Ilość: {{ item.quantity }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <form action="{% url 'plus-item' %}">
+                        <input type="hidden" name="item_id_plus" value="{{item.id}}">
+                        <button type="submit" class="btn btn-success">Dodaj</button>
+                    </form>
+                    <form action="{% url 'minus-item' %}">
+                        <input type="hidden" name="item_id_minus" value="{{item.id}}">
+                        <button type="submit" class="btn btn-warning">Usuń</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+    <li class="list-group-item d-flex align-items-center justify-content-between">
+        <div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    
+                </fieldset>
+                <div class="form-group">
+                    <a href="{% url 'order' %}" class="btn btn-outline-info" type="submit">Zapisz zmiany</a>
+                </div>
+            </form>
+            <h4 class="title h5 h4-sm">suma: {{ suma_zamowienia }}zł</h4>
+        </div>
+    </li>
+</ul>
+
+{% endblock content %}

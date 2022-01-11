@@ -1,0 +1,25 @@
+{% extends "witryna/base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+        <img src="{{ object.image.url }}" class="img-fluid"/>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ object.nazwa }}</h5>
+        <h6 class="text-muted">{{ object.cena }}zł</h6>
+        <span class="badge bg-primary rounded-pill text-light">Dostępne: {{ object.ilosc }} szt.</span>
+        <p class="text-muted">{{ object.opis }}</p>
+    </div>
+    <div class="card-footer">
+        <form action="{% url 'add-to-cart' %}">
+            {% if object.autor == user %}
+            <a class="btn btn-secondary" href="{% url 'produkt-update' object.id %}">Edytuj</a>
+            <a class="btn btn-danger" href="{% url 'produkt-delete' object.id %}">Usuń</a>
+            {% endif %}
+            <input type="hidden" name="prod_id" value="{{object.id}}" id="product_id">
+            <button type="submit" class="btn btn-success">Dodaj do koszyka</button>
+        </form>
+    </div>
+</div>
+{% endblock content%}
