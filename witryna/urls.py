@@ -16,5 +16,6 @@ urlpatterns = [
     path('produkt/new/', ProduktCreateView.as_view(), name='produkt-create'),
     path('produkt/<int:pk>/update/', ProduktUpdateView.as_view(), name='produkt-update'),
     path('produkt/<int:pk>/delete/', ProduktDeleteView.as_view(), name='produkt-delete'),
-    path('about/', views.about, name="witryna-about"),
+    path('contact/', views.contact, name="witryna-contact"),
+    path('search/', views.search, name="witryna-search"),
 ]

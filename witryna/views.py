@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponseRedirect
+from django.core.mail import send_mail
+from witryna.contact import ContactForm
 from django.views.generic import (
     ListView,
     DetailView,
@@ -19,14 +21,50 @@ def home(request):
     }
     return render(request, 'witryna/home.html', context)
 
+def contact(request):
+    submitted = False
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            firstname = request.POST.get('firstname')
+            surname = request.POST.get('surname')
+            email = request.POST.get('email')
+            subject = request.POST.get('subject')
+            message = request.POST.get('message')
 
-def about(request):
-    products_list = Produkt.objects.all()
+
+            data = {
+                'firstname': firstname,
+                'surname': surname,
+                'email': email,
+                'subject': subject,
+                'message': message,
+            }
+            message = '''
+                    New message: {}
+
+                    From: {}
+                    '''.format(data['message'], data['email'])
+            send_mail(data['subject'], message, '', ['djangosklep@gmail.com'])
+
+            return HttpResponseRedirect('/contact?submitted=True')
+    else:
+        form = ContactForm()
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'witryna/contact.html', {'form': form, 'submitted': submitted})
+
+
+
+def search(request):
+    q = request.GET['q']
+    products_list = Produkt.objects.filter(nazwa__icontains=q)
     paginator = Paginator(products_list, 8)
-
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'witryna/about.html', {'page_obj': page_obj})
+    return render(request, 'witryna/search.html', {'page_obj': page_obj})
+
 
 
 # Class base views
@@ -110,3 +148,4 @@ class ProduktDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == produkt.autor:
             return True
         return False
+
