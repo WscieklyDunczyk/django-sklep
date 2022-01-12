@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
-from django.shortcuts import render,HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect
 from django.core.mail import send_mail
 from witryna.contact import ContactForm
 from django.views.generic import (
@@ -21,6 +21,7 @@ def home(request):
     }
     return render(request, 'witryna/home.html', context)
 
+
 def contact(request):
     submitted = False
     if request.method == 'POST':
@@ -31,7 +32,6 @@ def contact(request):
             email = request.POST.get('email')
             subject = request.POST.get('subject')
             message = request.POST.get('message')
-
 
             data = {
                 'firstname': firstname,
@@ -56,7 +56,6 @@ def contact(request):
     return render(request, 'witryna/contact.html', {'form': form, 'submitted': submitted})
 
 
-
 def search(request):
     q = request.GET['q']
     products_list = Produkt.objects.filter(nazwa__icontains=q)
@@ -64,7 +63,6 @@ def search(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'witryna/search.html', {'page_obj': page_obj})
-
 
 
 # Class base views
@@ -93,7 +91,7 @@ class ProduktDetailView(DetailView):
 
 # LoginRequiredMixin - żeby dostać się do widoku na stronie trzeba być zalogowanym,
 # jeżeli nie to przekieruje do widoku logowania
-class ProduktCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class ProduktCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Produkt
 
     # ustalenie wymaganych uprawnień do wyświetlenia tego widoku
@@ -148,4 +146,3 @@ class ProduktDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == produkt.autor:
             return True
         return False
-
