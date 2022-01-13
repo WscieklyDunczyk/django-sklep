@@ -2,13 +2,16 @@ from django import forms
 
 
 class ContactForm(forms.Form):
-    firstname = forms.CharField(max_length=100, widget=forms.TextInput(attrs={ 'class': 'form-control','name':'firstname', 'placeholder':'Firstname' }))
-    surname = forms.CharField(max_length=100, widget=forms.TextInput(attrs={ 'class': 'form-control','name':'surname','placeholder':'Surname' }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={ 'class': 'form-control','name':'email','placeholder':'Email' }))
-    subject = forms.CharField(max_length=100, widget=forms.TextInput(attrs={ 'class': 'form-control','name':'subject','placeholder':'Subject' }))
-    message = forms.CharField(widget=forms.Textarea(attrs={ 'class': 'form-control','name':'message','rows':'7','cols':'50' }))
-
-
+    firstname = forms.CharField(max_length=100, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'name': 'firstname', 'placeholder': 'Firstname'}))
+    surname = forms.CharField(max_length=100, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'name': 'surname', 'placeholder': 'Surname'}))
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'name': 'email', 'placeholder': 'Email'}))
+    subject = forms.CharField(max_length=100, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'name': 'subject', 'placeholder': 'Subject'}))
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'name': 'message', 'rows': '7', 'cols': '50'}))
 
     def clean(self):
         cleaned_data = super(ContactForm, self).clean()
