@@ -16,11 +16,16 @@
             <legend class="border-bottom mb-4">Edytuj profil</legend>
             {{ u_form|crispy }}
             {{ p_form|crispy }}
-            {{ a_form|crispy }}
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Zapisz zmiany</button>
         </div>
     </form>
+    <h1>Zamówienia</h1>
+    <div>
+        {% for order in orders %}
+        <p>{{ order }}</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock content%}

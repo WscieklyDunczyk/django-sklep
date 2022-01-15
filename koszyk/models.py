@@ -19,7 +19,9 @@ class Cart(Model):
 
 class Order(Model):
     user = ForeignKey(User, on_delete=CASCADE)
-    # adres = ForeignKey(Adres, on_delete=CASCADE, null=True)
     product = ForeignKey(Produkt, on_delete=CASCADE)
     quantity = PositiveIntegerField()
     ordered_date = DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user} - {self.product.nazwa} - ilość:{self.quantity} cena:{self.product.cena}zł'

@@ -3,14 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from witryna.views import Produkt
 from .models import Cart, Order
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    DeleteView,
-    UpdateView
-)
+from django.contrib.auth.models import User
 
 
 @login_required
@@ -74,9 +67,26 @@ def order(request):
     user = request.user
     carts = Cart.objects.filter(user=user)
 
-    for c in carts:
-        Order(user=user, product=c.product, quantity=c.quantity).save()
+    if carts.exists():
+        for c in carts:
+            Order(user=user, product=c.product, quantity=c.quantity).save()
 
-        c.delete()
-    messages.success(request, f'Zamówienie zostało złożone do realizacji!')
+            c.delete()
+        messages.success(request, f'Zamówienie zostało złożone do realizacji!')
+    else:
+        messages.warning(request, f'Koszyk jest pusty!')
+
     return redirect('witryna-home')
+
+
+@login_required
+def orders(request):
+    orders = Order.objects.all()
+    users = User.objects.all()
+
+    context = {
+        'users': users,
+        'orders': orders,
+    }
+    return render(request, 'koszyk/orders.html', context)
+
