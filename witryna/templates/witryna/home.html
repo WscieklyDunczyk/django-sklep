@@ -1,17 +1,18 @@
 {% extends "witryna/base.html" %}
-<div class="container">
+
     {% block content %}
+<div class="container-fluid">
     <div class="row">
         {% for produkt in page_obj %}
-        <div class="col-3 mb-4">
-            <div class="card bg-light h-100" style="max-width: 18rem;">
+        <div class="col-lg-3 col-md-4 col-sm-5 mt-3">
+            <div class="card bg-light h-100">
                 <img src="{{ produkt.image.url }}" class="card-img-top" alt="">
                 <div class="card-body">
                     <a href="{% url 'produkt-detail' produkt.id %}"><h5 class="card-title">{{ produkt.nazwa }}</h5></a>
                     <h6 class="text-muted">{{ produkt.cena }}zł</h6>
                 </div>
                 <div class="card-body">
-                    <a href="{% url 'produkt-detail' produkt.id %}" class="btn btn-success">Dodaj do koszyka</a>
+                    <a href="{% url 'produkt-detail' produkt.id %}" class="btn btn-success">Kup</a>
                 </div>
             </div>
         </div>
